@@ -205,8 +205,7 @@ to `packet_count * 20` slots. `packet_count = ceil(total_leds / 20)`.
 ## Credits
 
 - **[glassknug](https://github.com/glassknug)** — desktop GUI, software effects,
-  system sensor integration, desktop launcher and Bazzite hardware testing;
-  developed with ChatGPT assistance.
+  system sensor integration, desktop launcher and Bazzite hardware testing.
 
 - **u/idk_a_name_wtf** (r/ASIAHORSEGlobal) — original Wireshark capture
   of the passthrough packets, proving the hub could be spoken to at all.

@@ -39,8 +39,7 @@ def main():
         messagebox.showinfo(
             "About AsiaHorse Umbra",
             "AsiaHorse Umbra for Linux\n\n"
-            "Desktop GUI, effects and sensor integration contributed by glassknug, "
-            "developed with ChatGPT assistance.\n\n"
+            "Desktop GUI, effects and sensor integration contributed by glassknug.\n\n"
             "Original Linux driver: ToeTagger / LuxDev372.\n"
             "Protocol research: maihcx and u/idk_a_name_wtf.\n\n"
             "MIT licensed. See LICENSE and README.md for original credits.\n"

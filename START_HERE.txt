@@ -20,5 +20,5 @@ All five effects have been reported working on an Umbra hub with Bazzite.
 Use one running app instance and do not run other RGB controllers simultaneously.
 For full installation steps, limitations and credits, see README.md.
 
-Desktop GUI and effects contributed by glassknug, developed with ChatGPT assistance.
+Desktop GUI and effects contributed by glassknug.
 Original driver and protocol credits are preserved in README.md and LICENSE.
