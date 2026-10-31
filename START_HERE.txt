@@ -4,7 +4,11 @@ Keep all files in this folder together.
 Install Python Tk and the USB permission rule using the distribution-specific
 instructions in README.md. If Tk is already installed, no reinstall is needed.
 
-From this folder, run:
+For an application-menu icon, run once from this folder (without sudo):
+python3 install_desktop.py
+Then search your application menu for AsiaHorse Umbra.
+
+Or run directly from this folder:
 python3 asiahorse_gui.py
 
 Choose an effect and press Start / apply.
@@ -15,3 +19,6 @@ Closing the app leaves the last frame lit. Animations require the app to stay op
 All five effects have been reported working on an Umbra hub with Bazzite.
 Use one running app instance and do not run other RGB controllers simultaneously.
 For full installation steps, limitations and credits, see README.md.
+
+Desktop GUI and effects contributed by glassknug, developed with ChatGPT assistance.
+Original driver and protocol credits are preserved in README.md and LICENSE.

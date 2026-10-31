@@ -10,7 +10,7 @@ from effects import EFFECTS, Player, Settings
 def main():
     try:
         import tkinter as tk
-        from tkinter import colorchooser, ttk
+        from tkinter import colorchooser, messagebox, ttk
     except ImportError as exc:
         print(f"Tk is unavailable: {exc}\nInstall Python Tk: python3-tkinter on Bazzite/Fedora; python3-tk on Debian/Ubuntu.", file=sys.stderr)
         return 1
@@ -31,7 +31,24 @@ def main():
 
     frame = ttk.Frame(root, padding=24)
     frame.pack(fill="both", expand=True)
-    ttk.Label(frame, text="AsiaHorse Umbra", style="Title.TLabel").pack(anchor="w")
+    header = ttk.Frame(frame)
+    header.pack(fill="x")
+    ttk.Label(header, text="AsiaHorse Umbra", style="Title.TLabel").pack(side="left")
+
+    def about():
+        messagebox.showinfo(
+            "About AsiaHorse Umbra",
+            "AsiaHorse Umbra for Linux\n\n"
+            "Desktop GUI, effects and sensor integration contributed by glassknug, "
+            "developed with ChatGPT assistance.\n\n"
+            "Original Linux driver: ToeTagger / LuxDev372.\n"
+            "Protocol research: maihcx and u/idk_a_name_wtf.\n\n"
+            "MIT licensed. See LICENSE and README.md for original credits.\n"
+            "https://github.com/glassknug/asiahorse-umbra-linux",
+            parent=root,
+        )
+
+    ttk.Button(header, text="About", command=about).pack(side="right")
     ttk.Label(frame, text="Lighting and system monitoring").pack(anchor="w", pady=(3, 20))
     ttk.Label(frame, text="Lighting · all connected RGB ports").pack(anchor="w")
     effect = tk.StringVar(value=EFFECTS[0])

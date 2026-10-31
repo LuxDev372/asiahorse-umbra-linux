@@ -61,6 +61,34 @@ have not taken effect. Run the app as your regular user:
 python3 asiahorse_gui.py
 ```
 
+### Application menu launcher
+
+After installing Tk and the USB rule, run this once as your regular user from
+the extracted project folder (no sudo):
+
+```sh
+python3 install_desktop.py
+```
+
+Search for **AsiaHorse Umbra** in your application menu. The app opens without
+a terminal and can be pinned to your dock or favorites. If the menu does not
+refresh immediately, sign out and back in.
+
+The installer copies the runtime files into `$XDG_DATA_HOME/asiahorse-umbra`
+(default `~/.local/share/asiahorse-umbra`) and installs a desktop entry and icon
+under the same data directory. Moving or deleting the downloaded folder will
+not break the installed app. Re-run the installer from a newer download to
+update it. Close the running app before installing or updating.
+
+To remove the per-user installation, run from a project download:
+
+```sh
+python3 install_desktop.py --uninstall
+```
+
+This leaves system-wide USB rules and Python Tk installed. Animations still
+require the app to remain open; the launcher does not enable autostart.
+
 ### Using effects
 
 1. Select an effect and choose a color.
@@ -91,9 +119,11 @@ Sensor access is read-only: the app does not control fan speed or cooling policy
 
 ### Validation and troubleshooting
 
-All five effects were reported working by the project user on an Umbra hub
-running Bazzite. Compatibility with other hardware configurations is not yet
-established. The English UI translation needs a desktop visual check; this
+glassknug reported all five effects working on an Umbra hub running Bazzite,
+and subsequently confirmed that the English GUI works well. Compatibility
+with other hardware configurations is not yet established. The new menu
+installer is tested with temporary directories; an end-to-end application-menu
+launch and the About dialog still need verification on a Linux desktop. This
 build environment has no working Tk display or attached hub.
 
 - **Permission denied:** install the `70-asiahorse.rules` rule above and reconnect USB.
@@ -173,6 +203,10 @@ to `packet_count * 20` slots. `packet_count = ceil(total_leds / 20)`.
    problem by using `/dev/hidraw` directly — no dependencies.
 
 ## Credits
+
+- **[glassknug](https://github.com/glassknug)** — desktop GUI, software effects,
+  system sensor integration, desktop launcher and Bazzite hardware testing;
+  developed with ChatGPT assistance.
 
 - **u/idk_a_name_wtf** (r/ASIAHORSEGlobal) — original Wireshark capture
   of the passthrough packets, proving the hub could be spoken to at all.
