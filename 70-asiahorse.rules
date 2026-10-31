@@ -1,0 +1,3 @@
+# Allow the active local desktop user to control the Umbra hub.
+# Must run before 73-seat-late.rules so uaccess ACLs are applied.
+SUBSYSTEM=="hidraw", KERNEL=="hidraw*", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="fe05", TAG+="uaccess"

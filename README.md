@@ -3,7 +3,7 @@
 Native Linux control for the **AsiaHorse Umbra ARGB hub** (USB `1a86:fe05`,
 enumerates as "USBFAN", QinHeng CH55x chip). AsiaHorse ships no Linux
 software and OpenRGB does not support this hub — this tool speaks its HID
-protocol directly through `/dev/hidraw`. Python 3 standard library only.
+protocol directly through `/dev/hidraw`. The CLI uses the Python 3 standard library only; the desktop GUI also requires Tk.
 
 Verified working August 2026: full-color control of 124 LEDs across 10
 ports on real hardware.
@@ -12,7 +12,7 @@ ports on real hardware.
 
 ```bash
 # one-time: let your user talk to the hub (then replug or: sudo udevadm trigger)
-sudo cp 99-asiahorse.rules /etc/udev/rules.d/
+sudo cp 70-asiahorse.rules /etc/udev/rules.d/
 sudo udevadm control --reload-rules && sudo udevadm trigger
 
 python3 asiahorse.py status          # read-only sanity check
@@ -20,6 +20,97 @@ python3 asiahorse.py topology        # per-port LED counts
 python3 asiahorse.py color 113 230 207
 python3 asiahorse.py off
 ```
+
+## Desktop GUI
+
+A native English-language Linux desktop app with five lighting effects:
+**Solid color**, **Breathing**, **Rainbow**, **Color cycle** and **Chase**.
+Includes color selection, brightness and speed controls, start/stop, and
+read-only temperature and fan-speed monitoring. No pip packages are required.
+
+### Install and launch
+
+Download and extract the entire repository (or clone it), keeping all Python
+files together. Install the Tk package for your distribution:
+
+```sh
+# Bazzite: install, then reboot before launching
+sudo rpm-ostree install python3-tkinter
+
+# Fedora Workstation
+sudo dnf install python3-tkinter
+
+# Debian / Ubuntu
+sudo apt install python3-tk
+```
+
+Run only the command for your distribution. From the project folder, install
+the USB permission rule once:
+
+```sh
+sudo cp 70-asiahorse.rules /etc/udev/rules.d/
+sudo udevadm control --reload-rules
+sudo udevadm trigger --subsystem-match=hidraw
+```
+
+The rule grants access to the active local desktop user via `uaccess`, without
+requiring a `plugdev` group. Reconnect the hub USB connection if permissions
+have not taken effect. Run the app as your regular user:
+
+```sh
+python3 asiahorse_gui.py
+```
+
+### Using effects
+
+1. Select an effect and choose a color.
+2. Adjust brightness and speed, then press **Start / apply**.
+3. Press **Start / apply** again after changing settings.
+
+The selected color applies to solid color, breathing and chase. Rainbow and
+color cycle generate their own colors. At 1× speed, one cycle takes four
+seconds; speed ranges from 0.25× to 3×. Effects repeat independently along
+each port's detected LED chain. All ports share the same settings; physical
+fan geometry and separate per-port settings are not configured in this version.
+
+**Stop** freezes the last frame. **Turn off RGB** sends black. Closing the
+app stops streaming and leaves the last frame latched. Animated effects require
+the app to stay open, streaming at up to approximately 20 frames/second.
+Do not run another RGB controller or a second app instance at the same time.
+No boot effects or firmware presets are modified.
+
+### Sensor readings
+
+Temperature and fan speed readings refresh every two seconds from Linux
+`/sys/class/hwmon`. Sources and sensor labels are shown alongside readings.
+These are system sensors, **not telemetry decoded from the Umbra hub**.
+Only sensors exposed by installed kernel drivers appear. A fan connected only
+to the hub may have no RPM reading. Missing or faulty readings show
+**Unavailable**, while an actual zero RPM reading is shown as zero.
+Sensor access is read-only: the app does not control fan speed or cooling policy.
+
+### Validation and troubleshooting
+
+All five effects were reported working by the project user on an Umbra hub
+running Bazzite. Compatibility with other hardware configurations is not yet
+established. The English UI translation needs a desktop visual check; this
+build environment has no working Tk display or attached hub.
+
+- **Permission denied:** install the `70-asiahorse.rules` rule above and reconnect USB.
+- **No hub found:** check the USB data cable and the hub's power connection.
+- **No LEDs detected:** check connected lighting devices; the GUI refuses to guess LED counts.
+- **No sensors:** only readings provided by your system's hwmon drivers can appear.
+
+Run backend tests without a USB device or desktop:
+
+```sh
+python3 -m unittest discover -s tests -v
+```
+
+The worker keeps one USB connection open during playback and handles the
+hub's software-mode re-enumeration using the existing driver. Tests cover
+animation values, packet numbering/padding/checksums, worker lifecycle and
+sensor parsing.
 
 ## Protocol documentation
 
